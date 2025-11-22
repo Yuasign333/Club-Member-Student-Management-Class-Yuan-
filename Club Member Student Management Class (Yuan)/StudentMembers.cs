@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Real_StudentClubManager__Midterms_
 {
     /// <summary>
-    /// handles the data related to student members (standalone class without base)
+    /// handles the data related to student members 
     /// </summary>
     public class StudentMember
     {
