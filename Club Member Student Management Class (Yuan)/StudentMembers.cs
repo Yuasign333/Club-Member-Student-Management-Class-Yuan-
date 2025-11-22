@@ -42,9 +42,8 @@ namespace Real_StudentClubManager__Midterms_
             return MemberName[0];
         }
 
-        /// <summary>
-        /// Returns the full name by combining the first and last names.
-        /// </summary>
+      
+        // Returns the full name by combining the first and last names.
         public string getFullName()
         {
             return getFirstName() + " " + getLastName();
