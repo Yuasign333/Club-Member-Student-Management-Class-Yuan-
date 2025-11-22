@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -300,11 +300,11 @@ namespace Real_StudentClubManager__Midterms_
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n{0,-20} | {1,-30}", "Field", "Value");
             Console.WriteLine("-------------------------------------------------------");
-            Console.ResetColor();
-            Console.WriteLine("{0,-20} | {1,-30}", "Club Name", currentAdminClub.GetClubName());
+            Console.ResetColor();    
             Console.WriteLine("{0,-20} | {1,-30}", "Club ID", currentAdminClub.GetClubID());
-            Console.WriteLine("{0,-20} | {1,-30}", "Administrator", currentAdminClub.GetAdministrator().AdminName());
+            Console.WriteLine("{0,-20} | {1,-30}", "Club Name", currentAdminClub.GetClubName()); 
             Console.WriteLine("{0,-20} | {1,-30}", "Admin ID", currentAdminClub.GetAdministrator().GetadminID());
+            Console.WriteLine("{0,-20} | {1,-30}", "Administrator", currentAdminClub.GetAdministrator().AdminName());
             Console.WriteLine("{0,-20} | {1,-30}", "Max Capacity", "3");
             Console.WriteLine("{0,-20} | {1,-30}", "Current Members", currentAdminClub.GetMembers().Count);
 
@@ -381,68 +381,6 @@ namespace Real_StudentClubManager__Midterms_
 
         }
 
-        public void DropStudentMenu()
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n--- Drop/Remove Student from My Club ---");
-            Console.ResetColor();
-
-            if (currentAdminClub.GetMembers().Count == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\nNo members to remove.");
-                Console.ResetColor();
-                return;
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\nCurrent Members:");
-            Console.ResetColor();
-            foreach (var member in currentAdminClub.GetMembers())
-            {
-                Console.WriteLine($"- {member.getFullName()} (ID: {member.getStudentID()})");
-            }
-
-            Console.Write("\nEnter Student Full Name to Remove: ");
-            string studentName = Console.ReadLine().Trim();
-
-            if (string.IsNullOrWhiteSpace(studentName))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nInvalid name.");
-                Console.ResetColor();
-                return;
-            }
-
-            // Find and remove student
-            StudentMember studentToRemove = null;
-            foreach (var member in currentAdminClub.GetMembers())
-            {
-                if (member.getFullName().ToLower() == studentName.ToLower())
-                {
-                    studentToRemove = member;
-                    break;
-                }
-            }
-
-            if (studentToRemove != null)
-            {
-                currentAdminClub.GetMembers().Remove(studentToRemove);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nSUCCESS: {studentName} has been removed from {currentAdminClub.GetClubName()}.");
-                Console.ResetColor();
-
-                // Check if someone in queue can be admitted
-                CheckAndAdmitFromQueue();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\n{studentName} not found in {currentAdminClub.GetClubName()}.");
-                Console.ResetColor();
-            }
-        }
-
         public void EnrollStudentMenu()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -472,7 +410,7 @@ namespace Real_StudentClubManager__Midterms_
                 }
             }
 
-            if (wordCount < 2)
+            if (wordCount < 2) // must be at least first and last name
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nError: Please enter a full name (First Name and Last Name).");
@@ -480,8 +418,16 @@ namespace Real_StudentClubManager__Midterms_
                 Console.ResetColor();
                 return;
             }
+            else if (wordCount > 2) // strictly only first and last name allowed
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nError: Please enter a full name of this format only (First Name and Last Name).");
 
-            // Check if student already in ANY club
+                Console.ResetColor();
+                return;
+            }
+
+                // Check if student already in ANY club
             bool alreadyEnrolled = false;
             string enrolledClubName = "";
             foreach (var club in clubRegistry.GetClubs())
@@ -547,6 +493,67 @@ namespace Real_StudentClubManager__Midterms_
                 clubRegistry.EnrollStudent(currentAdminClub.GetClubName(), studentName);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\nSUCCESS: {studentName} has been enrolled in {currentAdminClub.GetClubName()}!");
+                Console.ResetColor();
+            }
+        }
+        public void DropStudentMenu()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n--- Drop/Remove Student from My Club ---");
+            Console.ResetColor();
+
+            if (currentAdminClub.GetMembers().Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\nNo members to remove.");
+                Console.ResetColor();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nCurrent Members:");
+            Console.ResetColor();
+            foreach (var member in currentAdminClub.GetMembers())
+            {
+                Console.WriteLine($"- {member.getFullName()} (ID: {member.getStudentID()})");
+            }
+
+            Console.Write("\nEnter Student Full Name to Remove: ");
+            string studentName = Console.ReadLine().Trim();
+
+            if (string.IsNullOrWhiteSpace(studentName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nInvalid name.");
+                Console.ResetColor();
+                return;
+            }
+
+            // Find and remove student
+            StudentMember studentToRemove = null;
+            foreach (var member in currentAdminClub.GetMembers())
+            {
+                if (member.getFullName().ToLower() == studentName.ToLower())
+                {
+                    studentToRemove = member;
+                    break;
+                }
+            }
+
+            if (studentToRemove != null)
+            {
+                currentAdminClub.GetMembers().Remove(studentToRemove);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nSUCCESS: {studentName} has been removed from {currentAdminClub.GetClubName()}.");
+                Console.ResetColor();
+
+                // Check if someone in queue can be admitted
+                CheckAndAdmitFromQueue();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n{studentName} not found in {currentAdminClub.GetClubName()}.");
                 Console.ResetColor();
             }
         }
