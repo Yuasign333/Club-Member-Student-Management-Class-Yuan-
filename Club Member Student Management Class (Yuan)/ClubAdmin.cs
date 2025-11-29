@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +12,8 @@ namespace Real_StudentClubManager__Midterms_
     public class ClubAdmin
     {
         // Fields
-        public string adminID;
-        public string adminName;
+        private string adminID;
+        private string adminName;
 
         public ClubAdmin(string adminID, string adminName)
         {
