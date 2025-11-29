@@ -246,7 +246,7 @@ namespace Real_StudentClubManager__Midterms_
                             EnrollStudentMenu(); // tracks joining students (updates)
                             break;
                         case 3:
-                            DropStudentMenu(); // tracks removing  (updates)
+                            DropStudentMenu(); // tracks removing students(updates)
                             break;
                         case 4:
                             ViewAllClubs(); // produce report of all clubs
