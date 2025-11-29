@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace Real_StudentClubManager__Midterms_
 
         private static int StudentIdCounter = 1000;
 
-        private static int maxStudentsPerClub = 5;
+        private static int maxStudentsPerClub = 3;
 
         // Constructor sets up the fixed data structures
         public ClubRegistry()
