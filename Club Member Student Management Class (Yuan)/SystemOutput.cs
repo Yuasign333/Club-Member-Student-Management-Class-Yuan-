@@ -243,22 +243,22 @@ namespace Real_StudentClubManager__Midterms_
                     switch (choice)
                     {
                         case 1:
-                            ViewMyClubStatus();
+                            ViewMyClubStatus(); // manage whole club update (report)
                             break;
                         case 2:
-                            EnrollStudentMenu();
+                            EnrollStudentMenu(); // tracks joining students (updates)
                             break;
                         case 3:
-                            DropStudentMenu();
+                            DropStudentMenu(); // tracks removing  (updates)
                             break;
                         case 4:
-                            ViewAllClubs();
+                            ViewAllClubs(); // produce report of all clubs
                             break;
                         case 5:
-                            CheckWaitlistAndAdmit();
+                            CheckWaitlistAndAdmit(); // manage waitlist membership queue
                             break;
                         case 6:
-                            PostAnnouncementMenu();
+                            PostAnnouncementMenu(); // produce report within the club (messages)
                             break;
                         case 7:
                             exit = true;
@@ -668,7 +668,7 @@ namespace Real_StudentClubManager__Midterms_
                 string entry = waitlistQueue.Peek(); // Look at first in queue
                 string[] parts = entry.Split('|');
 
-                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
+                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName()) // validates club name
                 {
                     string studentName = parts[0];
 
@@ -917,7 +917,7 @@ namespace Real_StudentClubManager__Midterms_
             {
                 foreach (var member in club.GetMembers())
                 {
-                    if (member.getFullName().ToLower() == studentName.ToLower())
+                    if (member.getFullName().ToLower() == studentName.ToLower()) // match found
                     {
                         enrolledClub = club;
                         studentMember = member;
