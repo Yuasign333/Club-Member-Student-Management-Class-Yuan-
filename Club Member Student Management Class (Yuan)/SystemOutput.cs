@@ -20,9 +20,11 @@ namespace Real_StudentClubManager__Midterms_
 
         private List<string> clubAnnouncements = new List<string>();
 
-       // Queue for waitlist
+        // Queue for waitlist
 
-        private Queue<string> waitlistQueue = new Queue<string>(); // Format: "StudentName|ClubName thats why split logic was used" 
+        
+        private Queue<string> waitlistQueue = new Queue<string>(); // Waitlist queue storing entries in format "StudentName|ClubName"
+                                                                   // Use Split('|') logic to separate: parts[0] = StudentName, parts[1] = ClubName
 
         // Admin credentials 
         private string AdminPassword = "Club2025"; // fixed password for all admins
@@ -84,7 +86,7 @@ namespace Real_StudentClubManager__Midterms_
             Console.Clear();
         }
 
-        public void MainLoginMenu()
+        public void MainLoginMenu() // main login menu for admin and student
         {
             bool exit = false;
             while (!exit)
@@ -145,7 +147,7 @@ namespace Real_StudentClubManager__Midterms_
             }
         }
 
-        public void AdminLogin(bool login)
+        public void AdminLogin(bool login) // admin login flow
         {
             login = false;
             Clubs matchingClub = null;
@@ -210,7 +212,7 @@ namespace Real_StudentClubManager__Midterms_
             Console.Clear();
         }
 
-        public void AdminMenuLoop()
+        public void AdminMenuLoop() // admin menu loop
         {
             bool exit = false;
 
@@ -291,7 +293,7 @@ namespace Real_StudentClubManager__Midterms_
 
         // --- ADMIN OPTION IMPLEMENTATIONS ---
 
-        public void ViewMyClubStatus()
+        public void ViewMyClubStatus() // case 1 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n=====================================");
@@ -303,7 +305,9 @@ namespace Real_StudentClubManager__Midterms_
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n{0,-20} | {1,-30}", "Field", "Value");
             Console.WriteLine("-------------------------------------------------------");
-            Console.ResetColor();    
+            Console.ResetColor();
+
+            // Club Info
             Console.WriteLine("{0,-20} | {1,-30}", "Club ID", currentAdminClub.GetClubID());
             Console.WriteLine("{0,-20} | {1,-30}", "Club Name", currentAdminClub.GetClubName()); 
             Console.WriteLine("{0,-20} | {1,-30}", "Admin ID", currentAdminClub.GetAdministrator().GetadminID());
@@ -317,17 +321,19 @@ namespace Real_StudentClubManager__Midterms_
             Console.WriteLine("           MEMBERS");
             Console.WriteLine("=====================================");
             Console.ResetColor();
+
             if (currentAdminClub.GetMembers().Count > 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\n{0,-15} | {1,-30}", "Student ID", "Student Name");
                 Console.WriteLine("-------------------------------------------------------");
                 Console.ResetColor();
+
                 int memberIndex = 1;
                 foreach (var member in currentAdminClub.GetMembers())
                 {
-                    string newID = "S" + memberIndex.ToString("D4"); // Format as S0001, S0002, etc.
-                    Console.WriteLine("{0,-15} | {1,-30}", newID, member.getFullName());
+                    string displayID = "S" + memberIndex.ToString("D3"); // S001, S002, S003...
+                    Console.WriteLine("{0,-15} | {1,-30}", displayID, member.getFullName());
                     memberIndex++;
                 }
             }
@@ -350,7 +356,7 @@ namespace Real_StudentClubManager__Midterms_
             foreach (var entry in waitlistQueue)
             {
                 string[] parts = entry.Split('|');
-                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
+                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName()) // validates club name
                 {
                     waitlistCount++;
                 }
@@ -367,9 +373,9 @@ namespace Real_StudentClubManager__Midterms_
                 foreach (var entry in waitlistQueue)
                 {
                     string[] parts = entry.Split('|');
-                    if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
+                    if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName()) // validates club name
                     {
-                        Console.WriteLine("{0,-15} | {1,-30}", "Q" + position, parts[0]);
+                        Console.WriteLine("{0,-15} | {1,-30}", "Q" + position.ToString("D3"), parts[0]);
                         position++;
                     }
                 }
@@ -384,7 +390,7 @@ namespace Real_StudentClubManager__Midterms_
 
         }
 
-        public void EnrollStudentMenu()
+        public void EnrollStudentMenu() // case 2 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- Enroll Student in My Club ---");
@@ -430,14 +436,16 @@ namespace Real_StudentClubManager__Midterms_
                 return;
             }
 
-                // Check if student already in ANY club
+            // Check if student already in ANY club
             bool alreadyEnrolled = false;
+
             string enrolledClubName = "";
-            foreach (var club in clubRegistry.GetClubs())
+
+            foreach (var club in clubRegistry.GetClubs()) // check all clubs
             {
-                foreach (var member in club.GetMembers())
+                foreach (var member in club.GetMembers()) // check members
                 {
-                    if (member.getFullName().ToLower() == studentName.ToLower())
+                    if (member.getFullName().ToLower() == studentName.ToLower()) // match found
                     {
                         alreadyEnrolled = true;
                         enrolledClubName = club.GetClubName();
@@ -454,7 +462,7 @@ namespace Real_StudentClubManager__Midterms_
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"\n{studentName} is already enrolled in {enrolledClubName}.");
-                Console.WriteLine("Students can only join one club at a time.");
+                Console.WriteLine("\nStudents can only join one club at a time.");
                 Console.ResetColor();
                 return;
             }
@@ -466,7 +474,7 @@ namespace Real_StudentClubManager__Midterms_
                 string waitlistEntry = $"{studentName}|{currentAdminClub.GetClubName()}";
 
                 bool alreadyInWaitlist = false;
-                foreach (var entry in waitlistQueue)
+                foreach (var entry in waitlistQueue) // check if already in waitlist
                 {
                     if (entry == waitlistEntry)
                     {
@@ -485,7 +493,7 @@ namespace Real_StudentClubManager__Midterms_
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"\n{studentName} is already in the waitlist queue.");
                     Console.ResetColor();
                 }
@@ -499,13 +507,13 @@ namespace Real_StudentClubManager__Midterms_
                 Console.ResetColor();
             }
         }
-        public void DropStudentMenu()
+        public void DropStudentMenu() // case 3 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- Drop/Remove Student from My Club ---");
             Console.ResetColor();
 
-            if (currentAdminClub.GetMembers().Count == 0)
+            if (currentAdminClub.GetMembers().Count == 0) // no members to remove
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nNo members to remove.");
@@ -516,9 +524,13 @@ namespace Real_StudentClubManager__Midterms_
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nCurrent Members:");
             Console.ResetColor();
+
+            int memberIndex = 1;
             foreach (var member in currentAdminClub.GetMembers())
             {
-                Console.WriteLine($"- {member.getFullName()} (ID: {member.getStudentID()})");
+                string displayID = "S" + memberIndex.ToString("D3"); // S001, S002, S003...
+                Console.WriteLine($"- {member.getFullName()} (ID: {displayID})");
+                memberIndex++;
             }
 
             Console.Write("\nEnter Student Full Name to Remove: ");
@@ -536,7 +548,7 @@ namespace Real_StudentClubManager__Midterms_
             StudentMember studentToRemove = null;
             foreach (var member in currentAdminClub.GetMembers())
             {
-                if (member.getFullName().ToLower() == studentName.ToLower())
+                if (member.getFullName().ToLower() == studentName.ToLower()) // match found
                 {
                     studentToRemove = member;
                     break;
@@ -561,7 +573,7 @@ namespace Real_StudentClubManager__Midterms_
             }
         }
 
-        public void ViewAllClubs()
+        public void ViewAllClubs() // case 4 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- All Available Clubs ---");
@@ -606,35 +618,9 @@ namespace Real_StudentClubManager__Midterms_
             }
         }
 
-        public void CheckAndAdmitFromQueue()
-        {
-            // Automatically admit from queue if space available
-            while (currentAdminClub.GetMembers().Count < 3 && waitlistQueue.Count > 0)
-            {
-                string entry = waitlistQueue.Peek(); // Look at first entry
-                string[] parts = entry.Split('|');
+       
 
-                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
-                {
-                    string studentName = parts[0];
-
-                    // Dequeue and enroll
-                    waitlistQueue.Dequeue(); // Remove from queue
-                    clubRegistry.EnrollStudent(currentAdminClub.GetClubName(), studentName);
-
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nAuto-admitted from queue: {studentName}");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    // Entry is for different club, skip
-                    break;
-                }
-            }
-        }
-
-        public void CheckWaitlistAndAdmit()
+        public void CheckWaitlistAndAdmit() // case 5 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- Check Waitlist & Admit Students ---");
@@ -645,7 +631,7 @@ namespace Real_StudentClubManager__Midterms_
             foreach (var entry in waitlistQueue) // Check entries for this club
             {
                 string[] parts = entry.Split('|');
-                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
+                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName()) // validates club name
                 {
                     myWaitlistCount++;
                 }
@@ -728,8 +714,35 @@ namespace Real_StudentClubManager__Midterms_
                 Console.ResetColor();
             }
         }
+        public void CheckAndAdmitFromQueue() // case 5 admin menu helper
+        {
+            // Automatically admit from queue if space available
+            while (currentAdminClub.GetMembers().Count < 3 && waitlistQueue.Count > 0)
+            {
+                string entry = waitlistQueue.Peek(); // Look at first entry
+                string[] parts = entry.Split('|');
 
-        public void PostAnnouncementMenu()
+                if (parts.Length == 2 && parts[1] == currentAdminClub.GetClubName())
+                {
+                    string studentName = parts[0];
+
+                    // Dequeue and enroll
+                    waitlistQueue.Dequeue(); // Remove from queue
+                    clubRegistry.EnrollStudent(currentAdminClub.GetClubName(), studentName);
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nAuto-admitted from queue: {studentName}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    // Entry is for different club, skip
+                    break;
+                }
+            }
+        }
+
+        public void PostAnnouncementMenu() // case 6 admin menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- Post Club Announcement ---");
@@ -755,10 +768,10 @@ namespace Real_StudentClubManager__Midterms_
         }
 
         // ===============================================
-        // STUDENT FLOW
+        //                  STUDENT FLOW
         // ===============================================
 
-        public void StudentLoginAndMenu()
+        public void StudentLoginAndMenu() // student login and menu flow
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -825,7 +838,7 @@ namespace Real_StudentClubManager__Midterms_
             StudentMenuLoop(studentName, memberClub);
         }
 
-        public void StudentMenuLoop(string studentName, Clubs memberClub)
+        public void StudentMenuLoop(string studentName, Clubs memberClub) // student menu loop
         {
             bool exit = false;
             while (!exit)
@@ -889,7 +902,7 @@ namespace Real_StudentClubManager__Midterms_
             }
         }
 
-        public void ViewMyMembership(string studentName)
+        public void ViewMyMembership(string studentName) // case 1 student menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- My Club Membership ---");
@@ -926,9 +939,9 @@ namespace Real_StudentClubManager__Midterms_
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"\nClub Name: {enrolledClub.GetClubName()}");
-                Console.WriteLine($"Student ID: {studentMember.getStudentID()}");
-                Console.WriteLine($"Club Administrator: {enrolledClub.GetAdministrator().AdminName()}");
-                Console.WriteLine($"Total Members: {enrolledClub.GetMembers().Count}/3");
+                Console.WriteLine($"\nStudent ID: {studentMember.getStudentID()}");
+                Console.WriteLine($"\nClub Administrator: {enrolledClub.GetAdministrator().AdminName()}");
+                Console.WriteLine($"\nTotal Members: {enrolledClub.GetMembers().Count}/3");
                 Console.ResetColor();
             }
             else
@@ -943,7 +956,7 @@ namespace Real_StudentClubManager__Midterms_
                 foreach (var entry in waitlistQueue)
                 {
                     string[] parts = entry.Split('|');
-                    if (parts.Length == 2 && parts[0].ToLower() == studentName.ToLower())
+                    if (parts.Length == 2 && parts[0].ToLower() == studentName.ToLower()) // validates name
                     {
                         inWaitlist = true;
                         waitlistClub = parts[1];
@@ -965,7 +978,7 @@ namespace Real_StudentClubManager__Midterms_
             }
         }
 
-        public void ViewAnnouncementsMenu(string studentName)
+        public void ViewAnnouncementsMenu(string studentName) // case 2 student menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n--- Club Announcements ---");
@@ -979,7 +992,7 @@ namespace Real_StudentClubManager__Midterms_
             {
                 foreach (var member in club.GetMembers())
                 {
-                    if (member.getFullName().ToLower() == studentName.ToLower())
+                    if (member.getFullName().ToLower() == studentName.ToLower()) // match found
                     {
                         clubName = club.GetClubName();
                         foundMembership = true;
