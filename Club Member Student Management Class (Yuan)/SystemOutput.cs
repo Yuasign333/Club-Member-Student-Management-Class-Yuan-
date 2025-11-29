@@ -13,12 +13,15 @@ namespace Real_StudentClubManager__Midterms_
         // important variables and data structures
 
         // Club Registry instance to manage clubs and students (now an instance field)
+
         private ClubRegistry clubRegistry = new ClubRegistry();
 
         // Simple lists for announcements  
+
         private List<string> clubAnnouncements = new List<string>();
 
        // Queue for waitlist
+
         private Queue<string> waitlistQueue = new Queue<string>(); // Format: "StudentName|ClubName thats why split logic was used" 
 
         // Admin credentials 
@@ -26,7 +29,7 @@ namespace Real_StudentClubManager__Midterms_
 
         private Clubs currentAdminClub = null; // get the club of the currently logged-in admin
 
-        // Constructor for setup
+        // Constructor to run initial setup (for announcements)
         public SystemOutput()
         {
             // Initialize with default announcements for each club
@@ -571,6 +574,7 @@ namespace Real_StudentClubManager__Midterms_
 
             foreach (var club in clubRegistry.GetClubs())
             {
+                    
                 string clubName = club.GetClubName();
                 string adminName = club.GetAdministrator().AdminName();
                 int membersCount = club.GetMembers().Count;
@@ -585,8 +589,20 @@ namespace Real_StudentClubManager__Midterms_
                         waitlistCount++;
                     }
                 }
+                if (membersCount < 3 && waitlistCount == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
 
-                Console.WriteLine("{0,-20} | {1,-15} | {2,-10} | {3,-10}", clubName, adminName, membersCount + "/3", waitlistCount);
+                }
+                else if (membersCount >= 3 && waitlistCount > 0)
+                        
+                { 
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+
+                    Console.WriteLine("{0,-20} | {1,-15} | {2,-10} | {3,-10}", clubName, adminName, membersCount + "/3", waitlistCount);
+                    Console.WriteLine();
+                Console.ResetColor();
             }
         }
 
@@ -637,7 +653,7 @@ namespace Real_StudentClubManager__Midterms_
 
             if (myWaitlistCount == 0)
             {
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nNo students in waitlist queue.");
                 Console.ResetColor();
                 return;
