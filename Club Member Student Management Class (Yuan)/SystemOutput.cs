@@ -20,12 +20,9 @@ namespace Real_StudentClubManager__Midterms_
 
         private List<string> clubAnnouncements = new List<string>();
 
-        // Queue for waitlist
-
-        
+        // Queue for waitlist        
         private Queue<string> waitlistQueue = new Queue<string>(); // Waitlist queue storing entries in format "StudentName|ClubName"
                                                                    // Use Split('|') logic to separate: parts[0] = StudentName, parts[1] = ClubName
-
         // Admin credentials 
         private string AdminPassword = "Club2025"; // fixed password for all admins
 
