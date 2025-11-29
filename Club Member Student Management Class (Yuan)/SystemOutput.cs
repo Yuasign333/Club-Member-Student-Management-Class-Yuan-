@@ -99,7 +99,7 @@ namespace Real_StudentClubManager__Midterms_
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\n1. Administrator Login");
-                Console.WriteLine("\n2. Student Login / Registration");
+                Console.WriteLine("\n2. Student Login");
                 Console.WriteLine("\n3. Exit Application");
                 Console.Write("\nEnter your choice: ");
                 Console.ResetColor();
@@ -901,7 +901,8 @@ namespace Real_StudentClubManager__Midterms_
                 }
             }
         }
-
+      
+      
         public void ViewMyMembership(string studentName) // case 1 student menu
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -931,6 +932,8 @@ namespace Real_StudentClubManager__Midterms_
                 }
             }
 
+            
+
             if (foundMembership)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -939,7 +942,6 @@ namespace Real_StudentClubManager__Midterms_
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"\nClub Name: {enrolledClub.GetClubName()}");
-                Console.WriteLine($"\nStudent ID: {studentMember.getStudentID()}");
                 Console.WriteLine($"\nClub Administrator: {enrolledClub.GetAdministrator().AdminName()}");
                 Console.WriteLine($"\nTotal Members: {enrolledClub.GetMembers().Count}/3");
                 Console.ResetColor();
