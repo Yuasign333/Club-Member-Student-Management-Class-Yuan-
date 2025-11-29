@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,7 @@ namespace Real_StudentClubManager__Midterms_
         private ClubAdmin admin; // from club admin class
 
         private List<StudentMember> members; // List to hold student members (from student member class)
-        private int maxCapacity; 
+       
 
         // Constructor to initialize the private fields
         public Clubs(string clubID, string clubName, ClubAdmin admin)
@@ -51,9 +51,6 @@ namespace Real_StudentClubManager__Midterms_
         {
             return members;
         }
-        public int GetMaxCapacity() 
-        { 
-            return maxCapacity;
-        } 
+      
     }
 }
